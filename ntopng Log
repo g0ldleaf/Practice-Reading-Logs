@@ -1,0 +1,56 @@
+
+#install software
+apt install ntopng
+
+#run a pcap file as redis-server - Persistent key-value database, similar to memcached but the dataset is not volatile 
+#and other datatypes (such as  lists  and  sets) are natively supported.
+redis-server &
+ntopng --disable-autologout --disable-login=1 -i ./traffic.s0i0.pcap 
+#disable auto-logout of netflow, disable login, run pcap file that we downloaded
+27/Aug/2019 15:24:36 [Prefs.cpp:1092] All HTTP user login disabled
+27/Aug/2019 15:24:36 [Ntop.cpp:1902] Setting local networks to 127.0.0.0/8
+27/Aug/2019 15:24:36 [Redis.cpp:127] Successfully connected to redis 127.0.0.1:6379@0
+27/Aug/2019 15:24:36 [Redis.cpp:127] Successfully connected to redis 127.0.0.1:6379@0
+27/Aug/2019 15:24:36 [PcapInterface.cpp:69] Reading packets from pcap file traffic.s0i0.pcap...
+27/Aug/2019 15:24:36 [Ntop.cpp:1996] Registered interface traffic.s0i0.pcap [id: 1]
+27/Aug/2019 15:24:36 [main.cpp:308] PID stored in file /var/run/ntopng.pid
+27/Aug/2019 15:24:36 [HTTPserver.cpp:1029] HTTPS Disabled: missing SSL certificate /usr/share/ntopng/httpdocs/ssl/ntopng-cert.pem
+27/Aug/2019 15:24:36 [HTTPserver.cpp:1031] Please read https://github.com/ntop/ntopng/blob/dev/doc/README.SSL if you want to enable SSL.
+27/Aug/2019 15:24:36 [Utils.cpp:592] User changed to ntopng
+27/Aug/2019 15:24:36 [HTTPserver.cpp:1198] Web server dirs [/usr/share/ntopng/httpdocs][/usr/share/ntopng/scripts]
+27/Aug/2019 15:24:36 [HTTPserver.cpp:1201] HTTP server listening on 3000
+27/Aug/2019 15:24:36 [main.cpp:390] Working directory: /var/lib/ntopng
+27/Aug/2019 15:24:36 [main.cpp:392] Scripts/HTML pages directory: /usr/share/ntopng
+27/Aug/2019 15:24:36 [Ntop.cpp:403] Welcome to ntopng x86_64 v.3.8.190810 - (C) 1998-18 ntop.org
+27/Aug/2019 15:24:36 [PeriodicActivities.cpp:72] Started periodic activities loop...
+27/Aug/2019 15:24:37 [PeriodicActivities.cpp:113] Each periodic activity script will use 2 threads
+27/Aug/2019 15:24:37 [NetworkInterface.cpp:2577] Started packet polling on interface traffic.s0i0.pcap [id: 1]...
+27/Aug/2019 15:24:37 [NetworkInterface.cpp:2007] Invalid packet received [len: 2896][max len: 1522].
+27/Aug/2019 15:24:37 [NetworkInterface.cpp:2008] WARNING: If you have TSO/GRO enabled, please disable it
+27/Aug/2019 15:24:37 [NetworkInterface.cpp:2010] WARNING: Use sudo ethtool -K traffic.s0i0.pcap gro off gso off tso off
+27/Aug/2019 15:24:37 [PcapInterface.cpp:253] Terminated packet polling for traffic.s0i0.pcap
+
+#Open a browser and visit localhost:3000
+# navigate to Flows page - http://localhost:3000/lua/flows_stats.lua
+
+
+
+#replace localhost with your Kali ip address to use a browser on your host machine
+#new flows below
+4763:M 27 Aug 2019 15:27:22.032 * 100 changes in 300 seconds. Saving...
+4763:M 27 Aug 2019 15:27:22.033 * Background saving started by pid 4883
+4883:C 27 Aug 2019 15:27:22.038 * DB saved on disk
+4883:C 27 Aug 2019 15:27:22.039 * RDB: 6 MB of memory used by copy-on-write
+4763:M 27 Aug 2019 15:27:22.134 * Background saving terminated with success
+
+
+    Which sites are users visiting?
+    >Google, Facebook, Amazon, SSL, HTTP, ICMP, DNS, Twitter, Google Services, LinkedIn, Unknown
+    How many unique clients are in the log?
+    >2 clients - 10.0.3.15 & 192.168.56.104
+    Is any client performing any suspicious activity? If so, which client performed the suspicious activity, and what was the target?
+    >192.168.56.104 is sending 122 Bytes many times over an unknown application for durations of 1 second. This is a DOS attack against server 192.168.56.102.
+    Which DNS server are clients using?
+    >LinkedIn, Google, Facebook
+
+
